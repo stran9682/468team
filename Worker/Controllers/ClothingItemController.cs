@@ -17,8 +17,10 @@ namespace Worker.Controllers
 
         // TODO Fill database with clothing items.
         [HttpPost]
-        public IActionResult Post ([FromBody] ClothingItem item)
+        public async Task<IActionResult> Post ([FromBody] ClothingItem item)
         {
+            await _ClothingItemContext.ClothingItems.AddAsync(item);
+            await _ClothingItemContext.SaveChangesAsync();
             return Ok();
         }
 
@@ -33,8 +35,17 @@ namespace Worker.Controllers
                 query = query.Where(item => item.Type != null && item.Type.Type == type);
             }
 
-            return Ok(query.ToList());
+            if (color != null)
+            {
+                query = query.Where(item => item.Color != null && item.Color.ClothingColor == color);
+            }
 
+            if (fit != null)
+            {
+                query = query.Where(item => item.Style != null && item.Style.ClothingFit == fit);
+            }
+
+            return Ok(query.ToList());
         }
     }
 }

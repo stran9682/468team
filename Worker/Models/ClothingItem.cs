@@ -16,6 +16,6 @@ namespace Worker.Models
 
         public ClothingType? Type { get; set; }
         public Fit? Style { get; set; }
-        public List<Color>? Colors { get; set; }
+        public Color? Color { get; set; }
     }
 }

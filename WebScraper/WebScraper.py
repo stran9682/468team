@@ -1,3 +1,9 @@
+#
+#   WebScraper.py
+#   Purpose: for scraping clothing items and then making a POST request to worker API
+#   Author: Sebastian Tran
+#   
+
 from selenium import webdriver
 
 from selenium_stealth import stealth
@@ -7,6 +13,8 @@ from selenium.webdriver.common.by import By
 import codecs
 
 import os
+
+import json
 
 # create ChromeOptions object
 
@@ -33,83 +41,113 @@ stealth(driver,
 
         fix_hairline=True)
 
-
-# Open a webpage
-
-# driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html")
-
-# n = os.path.join("Page.html")
-
-# file = codecs.open(n, "w", "utf−8")
-
-# file.write(driver.page_source)
-
-path = os.path.join(os.path.dirname(__file__), "Page.html")
-
-driver.get('file://' + path)
-
 fits = [
-    "Loose",
-    "Muscle",
-    "Oversized",
-    "Regular",
-    "Relaxed",
-    "Slim",
+    "loose",
+    "oversized",
+    "regular",
+    "relaxed",
+    "slim",
 ]
 
 shirts = [
     "shirt",
-    "top",
+    "top"
 ]
 
 pants = [
     "shorts",
     "pants",
     "jeans",
+    "joggers",
+    "chinos"
 ]
 
-elements = driver.find_elements(By.CLASS_NAME, "f0cf84")
+jackets = [
+    "hoodie",
+    "sweatshirt",
+    "jacket",
+    "shacket",
+    "coat"
+]
 
-for element in elements:
+# Open a webpage
+for i in range (1):
 
-    text = element.get_attribute('innerHTML')
+    # driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html?page=" + str(i+1) + "#")
 
-    # stuff to find links.
-    imgPattern = "1536w\" src=\""
-    imgStart = text.find(imgPattern) + len(imgPattern)
+    # n = os.path.join("Page.html")
 
-    hrefPattern = "href=\""
-    hrefStart = text.find(hrefPattern) + len(hrefPattern)
+    # file = codecs.open(n, "w", "utf−8")
 
-    # parsing to find relavant data.
-    data = element.text.split("\n")
+    # file.write(driver.page_source)
 
-    # getting the fit
-    clothingItemFit = next ((fit for fit in fits if fit in data[3]), "other")
-    print(data[3])
-    print (clothingItemFit+"\n")
-    
+    path = os.path.join(os.path.dirname(__file__), "Page.html")
 
-    item = {
-        "id": 0,
-        "name": data[3],
-        "price": data[4][2 : data[4].index("$", 1)],
-        "image": text[imgStart:text.find("\"", imgStart+1)],
-        "link": text[hrefStart: text.find("\"", hrefStart+1)],
-        "type": {
+    driver.get('file://' + path)
+  
+    elements = driver.find_elements(By.CLASS_NAME, "f0cf84")
+
+    for element in elements:
+
+        # For getting the images inside the noscript tag
+        script = driver.execute_script("""
+                    let noscript = arguments[0].querySelector('noscript');
+                    if (noscript) {
+                        let tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = noscript.innerHTML;
+                        let img = tempDiv.querySelector('img');
+                        return img ? img.src : null;
+                    }
+                    return null;
+                """, element)
+
+        # for finding links
+        link = element.find_element(By.TAG_NAME, "a").get_attribute("href")
+        image =  element.find_element(By.TAG_NAME, "a").find_element(By.TAG_NAME, "img").get_attribute("src") if script == None else script
+
+        # for finding text
+        name = element.find_element(By.TAG_NAME, "h2").text.lower()
+        price = element.find_element(By.TAG_NAME, "p").text
+        price = price[2:] if price.find("$", 1) == -1 else price[2:price.find("$", 1)]
+
+        # for getting color
+        colorElement = element.find_elements(By.TAG_NAME, "ul")     # an oddity that the first UL is empty!
+        color = colorElement[1].find_element(By.TAG_NAME, "li").text.lower() if len(colorElement) >= 2 else "other"
+        color = color[:color.find("/")] if "/" in color else color  # handling cases when there is extra information.
+        
+        # getting the fit
+        clothingItemFit = next ((fit for fit in fits if fit in name), "other")
+
+        # getting the type of clothing item
+        clothingItemType = "other"
+        if any (jacket in name for jacket in jackets):
+            clothingItemType = "jacket" 
+        elif any (pant in name for pant in pants):
+            clothingItemType = "pants"
+        elif any (shirt in name for shirt in shirts):
+            clothingItemType = "shirt"
+
+        # creating the JSON
+        item = {
             "id": 0,
-            "type": "string"
-        },
-        "style": {
-            "id": 0,
-            "clothingFit": clothingItemFit
-        },
-        "colors": [
-            {
-            "id": 0,
-            "clothingColor": "string"
-            }
-        ]
-    }
+            "name": name,
+            "price": price,
+            "image": image,
+            "link": link,
+            "type": {
+                "id": 0,
+                "type": clothingItemType
+            },
+            "style": {
+                "id": 0,
+                "clothingFit": clothingItemFit
+            },
+            "colors": [
+                {
+                "id": 0,
+                "clothingColor": color
+                }
+            ]
+        }
 
 driver.quit()
