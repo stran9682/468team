@@ -4,6 +4,7 @@
  * Ex: Pants, Jackets, Shirts
  */
 
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Worker.Models
@@ -11,9 +12,10 @@ namespace Worker.Models
     public class ClothingType
     {
         public int Id { get; set; }
-        public string? Type { get; set; }
+
+        public string ClothingItemType { get; set; } = "other";
 
         [JsonIgnore]
-        public List<ClothingItem>? MatchingTypeItems { get; set; }
+        public List<ClothingItem> MatchingTypeItems { get; set; } = new List<ClothingItem>();
     }
 }

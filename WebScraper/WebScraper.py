@@ -16,6 +16,8 @@ import os
 
 import json
 
+import requests
+
 # create ChromeOptions object
 
 options = webdriver.ChromeOptions()
@@ -73,7 +75,7 @@ jackets = [
 # Open a webpage
 for i in range (1):
 
-    # driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html?page=" + str(i+1) + "#")
+    driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html?page=" + str(i+1) + "#")
 
     # n = os.path.join("Page.html")
 
@@ -81,9 +83,9 @@ for i in range (1):
 
     # file.write(driver.page_source)
 
-    path = os.path.join(os.path.dirname(__file__), "Page.html")
+    # path = os.path.join(os.path.dirname(__file__), "Page.html")
 
-    driver.get('file://' + path)
+    # driver.get('file://' + path)
   
     elements = driver.find_elements(By.CLASS_NAME, "f0cf84")
 
@@ -136,18 +138,20 @@ for i in range (1):
             "link": link,
             "type": {
                 "id": 0,
-                "type": clothingItemType
+                "clothingItemType": clothingItemType
             },
             "style": {
                 "id": 0,
                 "clothingFit": clothingItemFit
             },
-            "colors": [
-                {
+            "color": {
                 "id": 0,
                 "clothingColor": color
-                }
-            ]
+            }
         }
+
+        print (name + "\n" + price + "\n" + clothingItemType + "\n" + clothingItemFit + "\n" + color + "\n")
+
+        x = requests.post("http://localhost:8080/ClothingItem", json = item )
 
 driver.quit()

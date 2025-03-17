@@ -11,8 +11,8 @@ using Worker.Models;
 namespace Worker.Migrations
 {
     [DbContext(typeof(ClothingItemContext))]
-    [Migration("20250309171318_inital-create")]
-    partial class initalcreate
+    [Migration("20250316234006_RoundThree")]
+    partial class RoundThree
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,7 +72,8 @@ namespace Worker.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Type")
+                    b.Property<string>("ClothingItemType")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -89,6 +90,7 @@ namespace Worker.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClothingColor")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -105,6 +107,7 @@ namespace Worker.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClothingFit")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

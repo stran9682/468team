@@ -4,6 +4,7 @@
  * Ex: Black, White, Red
  */
 
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Worker.Models
@@ -11,9 +12,10 @@ namespace Worker.Models
     public class Color
     {
         public int Id { get; set; }
-        public string? ClothingColor { get; set; }
+
+        public string ClothingColor { get; set; } = "other";
 
         [JsonIgnore]
-        public List<ClothingItem>? MatchingColoredItems { get; set; }
+        public List<ClothingItem> MatchingColoredItems { get; set; } = new List<ClothingItem>();
     }
 }
