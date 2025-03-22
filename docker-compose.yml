@@ -17,7 +17,7 @@ services:
       - postgres_data:/var/lib/postgresql/data  # Persist data
 
   worker:
-    image: oooo:1.3
+    build: Worker
     container_name: worker
     ports:
       - "8080:8080"
