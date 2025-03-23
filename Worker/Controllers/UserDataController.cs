@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using Worker.Models;
 using Worker.Services;
 
@@ -74,6 +73,13 @@ namespace Worker.Controllers
 
             var token = _JwtService.GenerateToken(user);
             return Ok(new { Token = token });
+        }
+
+        [Authorize]
+        [HttpGet("useroutfits")]
+        public IActionResult GetUserOutfits()
+        {
+            return Ok(new { Message = "This is a protected API endpoint!" });
         }
     }
 }

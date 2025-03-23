@@ -1,4 +1,8 @@
-﻿using System.Text;
+﻿/*
+ * Injectible service for generating JWTs
+ */
+
+using System.Text;
 using Worker.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
