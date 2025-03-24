@@ -74,8 +74,16 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<JwtService>();
 
 // TODO Implement CORS functionality for API
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-// TODO initialize the database
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5371");
+                      });
+});
 
 var app = builder.Build();
 
@@ -88,6 +96,8 @@ using (var scope = app.Services.CreateScope())
     var userContext = scope.ServiceProvider.GetRequiredService<UserContext>();
     userContext.Database.Migrate();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseSwagger();
 app.UseSwaggerUI();

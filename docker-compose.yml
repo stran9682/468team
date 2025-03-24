@@ -9,8 +9,6 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
     networks:
       - mynetwork
     volumes:
@@ -29,8 +27,6 @@ services:
   webscraper:
     build: WebScraper
     container_name: webscraper
-    ports:
-      - "5000:5000"
     networks:
       - mynetwork
 
