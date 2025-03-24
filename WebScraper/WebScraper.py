@@ -23,6 +23,7 @@ import requests
 options = webdriver.ChromeOptions()
 
 options.add_argument('--headless')
+options.add_argument("--no-sandbox")
 
 
 # Set up WebDriver
@@ -152,6 +153,6 @@ for i in range (1):
 
         print (name + "\n" + price + "\n" + clothingItemType + "\n" + clothingItemFit + "\n" + color + "\n")
 
-        x = requests.post("http://localhost:8080/ClothingItem", json = item )
+        # x = requests.post("http://localhost:8080/ClothingItem", json = item )
 
 driver.quit()
