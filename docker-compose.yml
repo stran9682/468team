@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-container
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data
+
+  worker:
+    build: Worker
+    container_name: worker
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+
+  webscraper:
+    build: WebScraper
+    container_name: webscraper
+    ports:
+      - "5000:5000"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+
+volumes:
+  postgres_data:
