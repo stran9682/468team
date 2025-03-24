@@ -1,11 +1,12 @@
 ﻿/*
  * Sebastian Tran
- * Controller for managing clothing items.
- * Handles CRUD operations for clothing items.
+ * Controller with CRUD operations for managing clothing items.
+ * Ex: Adding a new clothing item to databse and finding clothing items
  */
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Worker.Models;
 
 namespace Worker.Controllers
@@ -96,6 +97,9 @@ namespace Worker.Controllers
         {
             var item = await _ClothingItemContext.ClothingColors
                                     .Include(item => item.MatchingColoredItems)
+                                        .ThenInclude(item => item.Type)
+                                    .Include(item => item.MatchingColoredItems)
+                                        .ThenInclude(item => item.Style)
                                     .FirstOrDefaultAsync(item => item.ClothingColor == color);
             
             if (item == null)
@@ -111,6 +115,9 @@ namespace Worker.Controllers
         {
             var item = await _ClothingItemContext.ClothingTypes
                                     .Include(item => item.MatchingTypeItems)
+                                        .ThenInclude(item => item.Color)
+                                    .Include(item => item.MatchingTypeItems)
+                                        .ThenInclude(item => item.Style)
                                     .FirstOrDefaultAsync(item => item.ClothingItemType == type);
 
             if (item == null)
@@ -125,12 +132,33 @@ namespace Worker.Controllers
         {
             var item = await _ClothingItemContext.Fits
                                     .Include(item => item.MatchingFitItems)
+                                        .ThenInclude(item => item.Color)
+                                    .Include(item => item.MatchingFitItems)
+                                        .ThenInclude(item => item.Type)
                                     .FirstOrDefaultAsync(item => item.ClothingFit == style);
             if (item == null)
             {
                 return NotFound($"Style {style} not found");
             }
             return Ok(item.MatchingFitItems);
+        }
+
+        [HttpGet("getcolors")]
+        public async Task<IActionResult> GetColors()
+        {
+            return Ok(await _ClothingItemContext.ClothingColors.ToListAsync());
+        }
+
+        [HttpGet("gettypes")]
+        public async Task<IActionResult> GetTypes()
+        {
+            return Ok(await _ClothingItemContext.ClothingTypes.ToListAsync());
+        }
+
+        [HttpGet("getstyles")]
+        public async Task<IActionResult> GetStyles()
+        {
+            return Ok(await _ClothingItemContext.Fits.ToListAsync());
         }
     }
 }

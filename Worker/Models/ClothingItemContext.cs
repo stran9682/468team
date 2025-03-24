@@ -1,5 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
+/*
+ * Sebastian Tran
+ * Database schema for clothing items
+ * contains properties and relationships associated with clothing items
+ */
+
 namespace Worker.Models
 {
     public class ClothingItemContext : DbContext

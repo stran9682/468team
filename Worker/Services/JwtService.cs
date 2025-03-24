@@ -1,4 +1,5 @@
 ﻿/*
+ * Sebatian Tran
  * Injectible service for generating JWTs
  */
 
