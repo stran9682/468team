@@ -74,15 +74,14 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<JwtService>();
 
 // TODO Implement CORS functionality for API
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-                      policy =>
-                      {
-                          policy.WithOrigins("http://localhost:5371");
-                      });
+    options.AddPolicy(name: "frontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
