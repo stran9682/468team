@@ -166,7 +166,7 @@ export default function App() {
 
   useEffect(() => {
     console.log('useEffect is running'); // Add this line to verify useEffect is running
-    fetch('http://localhost:8080/api/ClothingItem')
+    fetch('http://localhost:8080/ClothingItem')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
