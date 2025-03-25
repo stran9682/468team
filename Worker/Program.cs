@@ -96,7 +96,7 @@ using (var scope = app.Services.CreateScope())
     userContext.Database.Migrate();
 }
 
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors("frontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
