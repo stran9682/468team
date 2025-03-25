@@ -10,8 +10,8 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -40,14 +40,14 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-// TODO Initialize Database with correct connection string.
+// Initialize Database with correct connection string.
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ClothingItemContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<UserContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// TODO Add Identity services to the container.
+// Add Identity services to the container.
 builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<UserContext>()
     .AddDefaultTokenProviders();
@@ -63,25 +63,25 @@ builder.Services.AddAuthentication(options => {
     {
         options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
         {
-            ValidateIssuerSigningKey = true,    // basically make sure the token is valid from key
+            ValidateIssuerSigningKey = true,    // Make sure the token is valid from the key
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"]!)),
-            ValidateIssuer = false, // i am not caring about where the token is coming from
-            ValidateAudience = false,   // i also do not care who is recieving this damn token
-            ValidateLifetime = true     // but i do care that it is not expired
+            ValidateIssuer = false, // Not caring about where the token is coming from
+            ValidateAudience = false,   // Not caring about who is receiving this token
+            ValidateLifetime = true     // Ensure it's not expired
         };
     });
 
 builder.Services.AddScoped<JwtService>();
 
-// TODO Implement CORS functionality for API
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
+// Implement CORS functionality for API
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: "_myAllowSpecificOrigins",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5371");
+                          policy.AllowAnyOrigin()       // Allow any origin
+                                .AllowAnyHeader()       // Allow any header
+                                .AllowAnyMethod();      // Allow any HTTP method (GET, POST, etc.)
                       });
 });
 
@@ -97,16 +97,13 @@ using (var scope = app.Services.CreateScope())
     userContext.Database.Migrate();
 }
 
-app.UseCors(MyAllowSpecificOrigins);
+// Apply CORS policy
+app.UseCors("_myAllowSpecificOrigins");
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
