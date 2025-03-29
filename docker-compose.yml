@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
@@ -27,6 +25,16 @@ services:
   webscraper:
     build: WebScraper
     container_name: webscraper
+    networks:
+      - mynetwork
+
+  frontend:
+    build: StyleMe
+    container_name: frontend
+    ports:
+      - "5173:8080"
+    depends_on:
+      - worker
     networks:
       - mynetwork
 

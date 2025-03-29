@@ -1,51 +1,13 @@
 import { useState, useEffect } from 'react';
+import { ColorFilterSidebar } from './Filters/ColorFilter';
+import { StyleFilterSidebar } from './Filters/StyleFilter';
+import { TypeFilterSidebar } from './Filters/TypeFilter';
 
-function FilterSidebar ({ onFilterSelect, selectedColors }: { onFilterSelect: (color: string) => void, selectedColors: string[] }) {
-    const [data, setData] = useState<{ id: number; clothingColor: string }[]>([]);
-    useEffect (() =>{
-        fetch("http://localhost:8080/ClothingItem/getcolors")
-            .then(res => 
-
-                // http response
-                res.json())
-
-            .then (data => {
-
-                // extract data
-                setData(data)
-            })
-    }, [])
-    
-    // When elements are loading
-    if (data.length === 0){
-        return <p>Loading...</p>;
-    }
-
-    return (
-        <div style={{ width: '33%', padding: '10px' }}>
-            <h1 style={{margin: '10px'}}>Color</h1>
-            <div>
-                {data.map(item => (
-                    <button
-                        style={{
-                            backgroundColor: selectedColors.includes(item.clothingColor) ? "lightblue" : 'transparent',
-                        }} 
-                        key={item.id} 
-                        onClick={() => onFilterSelect(item.clothingColor)}
-                    >
-                        {item.clothingColor}
-                    </button>
-                ))}
-            </div>
-        </div>
-    )
-}
-
-function ClothingItemsDisplay ({colors} : {colors : string[]}) {
+function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits : string[], types : string[]}) {
     const [data, setData] = useState([]);
 
     useEffect (() =>{
-        if (colors.length === 0){
+        if (colors.length === 0 && fits.length === 0 && types.length === 0) {
 
             fetch("http://localhost:8080/ClothingItem/")
             .then(res =>  res.json())    
@@ -55,17 +17,31 @@ function ClothingItemsDisplay ({colors} : {colors : string[]}) {
             });
         }
         else {
-            Promise.all(
-                colors.map(color =>
-                    fetch(`http://localhost:8080/ClothingItem/getbycolor/${color}`)
-                        .then(res => res.json())
-                )
-            )
-            .then(results => setData(results.flat()))
-        }
-        
-    }, [colors])
 
+            // vibe coding...
+            const filterRequests = [];
+            for (const color of (colors.length ? colors : [""])) {
+                for (const fit of (fits.length ? fits : [""])) {
+                    for (const type of (types.length ? types : [""])) {
+                        const url = `http://localhost:8080/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
+                        console.log("Fetching:", url);
+                        filterRequests.push(fetch(url).then(res => res.json()));
+                    }
+                }
+            }
+    
+            // also vibe coding...
+            Promise.all(filterRequests)
+                .then(results => {
+                    console.log("Filtered data received:", results);
+                    setData(results.flat());
+                })
+                .catch(error => console.error("Error fetching filtered items:", error));
+        }
+    }, [colors, fits, types]);
+
+
+    
     return (
         <div
             style={
@@ -83,10 +59,13 @@ function ClothingItemsDisplay ({colors} : {colors : string[]}) {
                         backgroundImage: `url(${item.image})`,
                         width: '33.33%',
                         height: '400px',
-                        backgroundSize: "cover"
+                        backgroundSize: "cover",
+                        color:'white',
+                        display: 'flex',
+                        justifyContent: 'center',
                     }}
                 >
-                    {item.name}
+                    <h2>{item.name}</h2>
                 </div>
             ))}
         </div>
@@ -95,6 +74,10 @@ function ClothingItemsDisplay ({colors} : {colors : string[]}) {
 
 export function FilterComponent () {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedFits, setSelectedFits] = useState<string[]>([]);
+    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+
+   const [panel, setPanel] = useState(1);
 
     const toggleFilter = (color: string) => {
         setSelectedColors(prevColors =>
@@ -104,10 +87,34 @@ export function FilterComponent () {
         );
     };
 
+    const toggleFit = (fit: string) => {
+        setSelectedFits(prevFits =>
+            prevFits.includes(fit)
+                ? prevFits.filter(f => f !== fit) // Remove if already selected
+                : [...prevFits, fit] // Add if not selected
+        );
+    };
+
+    const toggleType = (type: string) => {
+        setSelectedTypes(prevTypes =>
+            prevTypes.includes(type)
+                ? prevTypes.filter(t => t !== type) // Remove if already selected
+                : [...prevTypes, type] // Add if not selected
+        );
+    };
+
     return (
         <div style={{ display: 'flex', width: '100%' }}>
-            <FilterSidebar onFilterSelect={toggleFilter} selectedColors={selectedColors}/>
-            <ClothingItemsDisplay colors={selectedColors}/>
+            {panel === 1 && (
+                <ColorFilterSidebar onFilterSelect={toggleFilter} selectedColors={selectedColors} panel={setPanel} />
+            )}
+            {panel === 2 && (
+                <StyleFilterSidebar onFilterSelect={toggleFit} selectedStyles={selectedFits} panel={setPanel} />
+            )}
+            {panel === 3 && (
+                <TypeFilterSidebar onFilterSelect={toggleType} selectedTypes={selectedTypes} panel={setPanel} />
+            )}
+            <ClothingItemsDisplay colors={selectedColors} fits={selectedFits} types={selectedTypes} />
         </div>
     );
 }
