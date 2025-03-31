@@ -32,7 +32,7 @@ services:
     build: StyleMe
     container_name: frontend
     ports:
-      - "5173:8080"
+      - "5173:5173"
     depends_on:
       - worker
     networks:
