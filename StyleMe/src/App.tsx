@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { FilterComponent } from "./OutfitMaker";
 
 const Home = ({ data }) => (
   <div className="p-6">
     <h2 className="text-3xl font-bold">Welcome to StyleMe!</h2>
     <p className="mt-2">With StyleMe, you are able to find the best colors and clothing tailored specifically for you.</p>
+    <FilterComponent/>
     <div className="mt-4">
       <h3 className="text-2xl font-bold">Fetched Data:</h3>
       <ul>
         {data && data.map(item => (
-          <li key={item.id} className="mt-2">{item.title}</li>
+          <li key={item.id} className="mt-2">{item.name}</li>
         ))}
       </ul>
     </div>
@@ -166,7 +168,7 @@ export default function App() {
 
   useEffect(() => {
     console.log('useEffect is running'); // Add this line to verify useEffect is running
-    fetch('http://localhost:8080/api/ClothingItem')
+    fetch('http://localhost:8080/ClothingItem')
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -198,6 +200,7 @@ export default function App() {
           <Route path="/profile" element={<Profile isAuthenticated={isAuthenticated} />} />
           <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
           <Route path="/signup" element={<Signup onSignup={() => setIsAuthenticated(true)} />} />
+         
         </Routes>
       </div>
     </Router>

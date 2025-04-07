@@ -10,7 +10,7 @@ mp_pose = mp.solutions.pose.Pose(min_detection_confidence=0.7,
 min_tracking_confidence=0.7)
 #where the min_detection_conficence and min_tracking_confidence are the minimum threshold values for detecting the pose
 
-imgO = pimg.imread('test3.jpg')
+imgO = pimg.imread('test2.jpg')
 img = np.copy(imgO)
 
 #detecting the object using mediapipe

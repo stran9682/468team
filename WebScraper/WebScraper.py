@@ -74,7 +74,7 @@ jackets = [
 ]
 
 # Open a webpage
-for i in range (1):
+for i in range (5):
 
     driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html?page=" + str(i+1) + "#")
 
