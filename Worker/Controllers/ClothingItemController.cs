@@ -160,16 +160,5 @@ namespace Worker.Controllers
         {
             return Ok(await _ClothingItemContext.Fits.ToListAsync());
         }
-
-        [HttpGet("testget")]
-        public IActionResult TestGet (List<string>? types, List<string>? colors, List <string>? fits)
-        {
-            var cartesianProduct = from type in types
-                                   from color in colors
-                                   from fit in fits
-                                   select new { type, color, fit };
-
-            return Ok(cartesianProduct);
-        }
     }
 }

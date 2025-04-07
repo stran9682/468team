@@ -38,6 +38,16 @@ services:
     networks:
       - mynetwork
 
+    
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    environment:
+      - WATCHTOWER_CLEANUP=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 30 go_app
+
 networks:
   mynetwork:
 
