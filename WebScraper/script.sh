@@ -4,7 +4,7 @@ wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 dpkg -i google-chrome-stable_current_amd64.deb
 apt-get install -f -y
 wget https://storage.googleapis.com/chrome-for-testing-public/134.0.6998.165/linux64/chromedriver-linux64.zip
-apt install unzip
+apt install unzip -y
 unzip chromedriver-linux64.zip
 mv /chromedriver-linux64/chromedriver /bin
 chown root:root /usr/bin/chromedriver

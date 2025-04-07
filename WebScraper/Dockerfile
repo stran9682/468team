@@ -17,7 +17,7 @@ FROM ubuntu:latest
 # CMD ["python3", "WebScraper.py"]
 
 COPY script.sh .
-RUN chmod -R 755 /script.sh
+RUN RUN chmod -R 755 /script.sh && sh /script.sh
 ENV PATH="/my-venv/bin:$PATH"
 
 COPY requirements.txt .
