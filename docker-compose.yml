@@ -29,8 +29,12 @@ services:
       - mynetwork
 
   frontend:
-    build: StyleMe
+    build: 
+      context: ./StyleMe
+      tags:
+        - "stran9682/frontend:latest"
     container_name: frontend
+    image: linhbngo/go_server:latest
     ports:
       - "5173:5173"
     depends_on:
