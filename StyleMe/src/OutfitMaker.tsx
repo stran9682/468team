@@ -9,7 +9,7 @@ function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits 
     useEffect (() =>{
         if (colors.length === 0 && fits.length === 0 && types.length === 0) {
 
-            fetch("http://localhost:8080/ClothingItem/")
+            fetch("http://worker:8080/ClothingItem/")
             .then(res =>  res.json())    
             .then (data => {
                 // extract data
@@ -23,7 +23,7 @@ function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits 
             for (const color of (colors.length ? colors : [""])) {
                 for (const fit of (fits.length ? fits : [""])) {
                     for (const type of (types.length ? types : [""])) {
-                        const url = `http://localhost:8080/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
+                        const url = `http://worker:8080/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
                         console.log("Fetching:", url);
                         filterRequests.push(fetch(url).then(res => res.json()));
                     }
