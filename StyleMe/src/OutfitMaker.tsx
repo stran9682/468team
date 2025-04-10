@@ -3,13 +3,15 @@ import { ColorFilterSidebar } from './Filters/ColorFilter';
 import { StyleFilterSidebar } from './Filters/StyleFilter';
 import { TypeFilterSidebar } from './Filters/TypeFilter';
 
+const header = import.meta.env.VITE_API_URL
+
 function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits : string[], types : string[]}) {
-    const [data, setData] = useState([]);
+    const [data, setData] = useState<any[]>([]);
 
     useEffect (() =>{
         if (colors.length === 0 && fits.length === 0 && types.length === 0) {
 
-            fetch("http://worker:8080/ClothingItem/")
+            fetch(header + "/ClothingItem/")
             .then(res =>  res.json())    
             .then (data => {
                 // extract data
@@ -23,7 +25,7 @@ function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits 
             for (const color of (colors.length ? colors : [""])) {
                 for (const fit of (fits.length ? fits : [""])) {
                     for (const type of (types.length ? types : [""])) {
-                        const url = `http://worker:8080/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
+                        const url = `${header}/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
                         console.log("Fetching:", url);
                         filterRequests.push(fetch(url).then(res => res.json()));
                     }

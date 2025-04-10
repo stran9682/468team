@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 
+const header = import.meta.env.VITE_API_URL;
+
 export function StyleFilterSidebar ({ onFilterSelect, selectedStyles, panel }: { onFilterSelect: (color: string) => void, selectedStyles: string[], panel: (num:number ) => void }) {
     const [data, setData] = useState<{ id: number; clothingFit: string }[]>([]);
     useEffect (() =>{
-        fetch("http://localhost:8080/ClothingItem/getstyles")
+        fetch(header + "/ClothingItem/getstyles")
             .then(res => 
 
                 // http response
