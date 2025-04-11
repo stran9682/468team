@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState } from 'react';   
 const header = import.meta.env.VITE_API_URL
 
-const LogIn = () => {
-    const [jwt, setJwt] = useState<{token : String}>();
+const LogIn = ({setJwt}:{setJwt: (jwt: {token:string}) => void}) => {
     const [badLoginAttempt, setLoginAttempt] = useState<String>("");
 
     const loginAttempt = (username: string , password : string) => {
@@ -20,7 +19,6 @@ const LogIn = () => {
                     setLoginAttempt("")
                 }).catch (error => {
                     setLoginAttempt("bad log in attempt " + error)
-                    setJwt(undefined)
                 })        
         }
     }
@@ -30,7 +28,6 @@ const LogIn = () => {
             Username<input id="username"></input>
             Password<input id="password"></input>
             <button onClick={() => loginAttempt((document.getElementById("username") as HTMLInputElement)?.value, (document.getElementById("password") as HTMLInputElement)?.value)}>Login</button>
-            {jwt}
             {badLoginAttempt}
         </>
     )

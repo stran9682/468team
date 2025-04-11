@@ -1,24 +1,49 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, NavLink } from 'react-router-dom';
 import { FilterComponent} from './Pages/OutfitMaker'
-import NavBar from './Pages/NavBar';
+import { useState } from 'react';
 import Home from './Pages/Home';
-import LogIn from './Pages/LogIn';
-import SignUp from './Pages/SignUp';
+import LogIn from './Pages/UserManagement/LogIn';
+import SignUp from './Pages/UserManagement/SignUp';
+import Profile from './Pages/UserManagement/Profile';
 
 
 const App = () => {
-    return (
-        <>
-            <NavBar/>
-            <Routes>
-                <Route path="/create" element={<FilterComponent/>}/>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/login" element={<LogIn/>}/>
-                <Route path="/sign up" element={<SignUp/>}/>
+    const [jwt, setJwt] = useState<{token: string} | null>(null);
 
-            </Routes>
-        </>
-    )
+    if (jwt == null) {
+        return (
+            <>
+                <nav>
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/create">Create</NavLink>
+                    <NavLink to="/login">Log In</NavLink>
+                    <NavLink to="/sign up">Sign Up</NavLink>
+                </nav>
+                <Routes>
+                    <Route path="/create" element={<FilterComponent/>}/>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/login" element={<LogIn setJwt={setJwt}/>}/>
+                    <Route path="/sign up" element={<SignUp/>}/>
+                </Routes>
+            </>
+        )
+    }
+    else {
+        return (
+            <>
+               <nav>
+                    <NavLink to="/">Home</NavLink>
+                    <NavLink to="/create">Create</NavLink>
+                    <NavLink to="/profile">profile</NavLink>
+                </nav>
+                <Routes>
+                    <Route path="/create" element={<FilterComponent/>}/>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/profile" element={<Profile/>}/>
+                </Routes>
+            </>
+        )
+    }
 }
 
 export default App;
