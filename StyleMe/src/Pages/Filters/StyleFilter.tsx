@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const header = import.meta.env.VITE_API_URL;
 
-export function StyleFilterSidebar ({ onFilterSelect, selectedStyles, panel }: { onFilterSelect: (color: string) => void, selectedStyles: string[], panel: (num:number ) => void }) {
+export function StyleFilterSidebar ({ onFilterSelect, selectedStyles}: { onFilterSelect: (color: string) => void, selectedStyles: string[]}) {
     const [data, setData] = useState<{ id: number; clothingFit: string }[]>([]);
     useEffect (() =>{
         fetch(header + "/ClothingItem/getstyles")
@@ -24,10 +24,9 @@ export function StyleFilterSidebar ({ onFilterSelect, selectedStyles, panel }: {
     }
 
     return (
-        <div style={{ width: '33%', padding: '10px' }}>
-           <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{padding: '10px' }}>
+           <div>
                 <h1 style={{margin: '10px'}}>Style</h1>
-                <h2 onClick={() => panel(1)}>next</h2>
 
             </div>
             <div>

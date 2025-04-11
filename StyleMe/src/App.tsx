@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
-import { FilterComponent } from "./OutfitMaker";
+import { FilterComponent } from "./Pages/OutfitMaker";
 
 const Home = ({ data } : {data: any[]}) => (
   <div className="p-6">

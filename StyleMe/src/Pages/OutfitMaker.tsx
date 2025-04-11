@@ -67,9 +67,9 @@ function ClothingItemsDisplay ({colors, fits, types} : {colors : string[], fits 
                         justifyContent: 'center',
                     }}
                 >
-                    <h2>{item.name}</h2>
+                    <h2 className='text-white text-lg text-shadow-lg'>{item.name}</h2>
                 </div>
-            ))}
+            ))} 
         </div>
     )
 }
@@ -78,8 +78,6 @@ export function FilterComponent () {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedFits, setSelectedFits] = useState<string[]>([]);
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-
-   const [panel, setPanel] = useState(1);
 
     const toggleFilter = (color: string) => {
         setSelectedColors(prevColors =>
@@ -107,15 +105,12 @@ export function FilterComponent () {
 
     return (
         <div style={{ display: 'flex', width: '100%' }}>
-            {panel === 1 && (
-                <ColorFilterSidebar onFilterSelect={toggleFilter} selectedColors={selectedColors} panel={setPanel} />
-            )}
-            {panel === 2 && (
-                <StyleFilterSidebar onFilterSelect={toggleFit} selectedStyles={selectedFits} panel={setPanel} />
-            )}
-            {panel === 3 && (
-                <TypeFilterSidebar onFilterSelect={toggleType} selectedTypes={selectedTypes} panel={setPanel} />
-            )}
+            <div style={{width: '33%'}}>
+                <ColorFilterSidebar onFilterSelect={toggleFilter} selectedColors={selectedColors}/>
+                <StyleFilterSidebar onFilterSelect={toggleFit} selectedStyles={selectedFits}/>
+                <TypeFilterSidebar onFilterSelect={toggleType} selectedTypes={selectedTypes}/>
+            </div>
+                
             <ClothingItemsDisplay colors={selectedColors} fits={selectedFits} types={selectedTypes} />
         </div>
     );
