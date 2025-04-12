@@ -119,8 +119,11 @@ namespace Worker.Controllers
             var token = new JwtSecurityToken(tokenString);                                  // create JWT object 
             string username = token.Claims.First(c => c.Type == "unique_name").Value;       // extract username
 
+
+            // Get user from JWT, then attach outfits and use navigation property to get items
             var userOutfits = await _UserContext.Users.Include(u => u.Outfits).ThenInclude(o => o.Items).FirstOrDefaultAsync(u => u.UserName == username);
 
+            // Handle bad request (should be never, unless JWT is forged)
             if (userOutfits == null)
             {   
                 return BadRequest("User outfits is null " + username);
@@ -141,12 +144,19 @@ namespace Worker.Controllers
             var token = new JwtSecurityToken(tokenString);                                  // create JWT object 
             string username = token.Claims.First(c => c.Type == "unique_name").Value;       // extract username
 
-            var user = await _UserContext.Users.Include(u => u.Outfits).FirstOrDefaultAsync(u => u.UserName == username); // find user associated with JWT
+            var user = await _UserContext.Users.FirstOrDefaultAsync(u => u.UserName == username); // find user associated with JWT
 
             if (clothingItemIds is not null && clothingItemIds.Count > 0 && user is not null)
             {
-                var items = await _UserContext.ClothingItems.Where(t => clothingItemIds.Contains(t.Id)).ToListAsync();
+                var items = await _UserContext.ClothingItems.Where(t => clothingItemIds.Contains(t.Id)).AsNoTracking().ToListAsync();   // Get clothing items from list
 
+                // In the case that a request with invalid items is made.
+                if (items is null || items.Count == 0)
+                {
+                    return BadRequest("Invalid request");
+                }
+
+                // Create outfit from available information, new items shouldn't ever be created here!
                 var dataTransfer = new Outfit
                 {
                     Items = items,
@@ -156,7 +166,7 @@ namespace Worker.Controllers
                 user.Outfits.Add(dataTransfer);
                 await _UserContext.SaveChangesAsync();
 
-                return Ok(user.Outfits);
+                return Ok();
             }
             
             return BadRequest("User outfit creation unsuccessful");

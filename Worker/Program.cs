@@ -44,12 +44,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<ClothingItemContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddEntityFrameworkNpgsql().AddDbContext<UserContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // Add Identity services to the container.
 builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<UserContext>()
+    .AddEntityFrameworkStores<ClothingItemContext>()
     .AddDefaultTokenProviders();
 
 // Set up JWT authentication
@@ -91,9 +88,6 @@ using (var scope = app.Services.CreateScope())
 {
     var clothingItemContext = scope.ServiceProvider.GetRequiredService<ClothingItemContext>();
     clothingItemContext.Database.Migrate();
-
-    var userContext = scope.ServiceProvider.GetRequiredService<UserContext>();
-    userContext.Database.Migrate();
 }
 
 // Apply CORS policy
