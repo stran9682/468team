@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
-import { FilterComponent } from "./OutfitMaker";
+import { FilterComponent } from "./Pages/OutfitMaker";
 
-const Home = ({ data }) => (
+const Home = ({ data } : {data: any[]}) => (
   <div className="p-6">
     <h2 className="text-3xl font-bold">Welcome to StyleMe!</h2>
     <p className="mt-2">With StyleMe, you are able to find the best colors and clothing tailored specifically for you.</p>
@@ -40,7 +40,7 @@ const Catalog = () => {
   );
 };
 
-const Profile = ({ isAuthenticated }) => {
+const Profile = ({ isAuthenticated } : {isAuthenticated : boolean}) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
@@ -53,7 +53,7 @@ const Profile = ({ isAuthenticated }) => {
   );
 };
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin } : {onLogin: () => void}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -88,7 +88,7 @@ const Login = ({ onLogin }) => {
   );
 };
 
-const Signup = ({ onSignup }) => {
+const Signup = ({ onSignup } : {onSignup : () => void}) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState(""); // Add email state
   const [password, setPassword] = useState("");
@@ -139,7 +139,7 @@ const Signup = ({ onSignup }) => {
   );
 };
 
-const Header = ({ isAuthenticated, onLogout }) => (
+const Header = ({ isAuthenticated, onLogout } : {isAuthenticated: boolean, onLogout: () => void}) => (
   <header className="bg-blue-500 text-white p-4 flex justify-between items-center">
     <h1 className="text-5xl font-bold text-center">StyleMe</h1>
     <nav>
@@ -161,7 +161,7 @@ const Header = ({ isAuthenticated, onLogout }) => (
 );
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -195,7 +195,7 @@ export default function App() {
       <div className="min-h-screen bg-gray-100 text-gray-900">
         <Header isAuthenticated={isAuthenticated} onLogout={() => setIsAuthenticated(false)} />
         <Routes>
-          <Route path="/" element={<Home data={data} />} />
+          <Route path="/" element={<Home data={data!} />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/profile" element={<Profile isAuthenticated={isAuthenticated} />} />
           <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />

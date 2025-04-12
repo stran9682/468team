@@ -17,12 +17,22 @@ namespace Worker.Controllers
     {
         ClothingItemContext _ClothingItemContext;
 
+        /*
+         * Constructor to inject services
+         * - ClothingItemContext contains DB tables related to clothing items
+         */
         public ClothingItemController(ClothingItemContext clothingContext)
         {
             _ClothingItemContext = clothingContext;
         }
 
-        // TODO Fill database with clothing items.
+        /*
+         * HTTP endpoint to add a clothing item
+         *  - Takes in a ClothingItem
+         *  - ClothingItem can be lax, since EFCore will auto-increment if navigation properties are new and fill in the rest
+         *  - Web Scraper is also good at filling in most information, so there shouldn't be cases of empty data
+         *    But in case! Post will reutrn a bad request!    
+         */
         [HttpPost]
         public async Task<IActionResult> Post ([FromBody] ClothingItem item)
         {
@@ -37,6 +47,10 @@ namespace Worker.Controllers
                     color.MatchingColoredItems.Add(item);
                 }
             }
+            else
+            {
+                return BadRequest("Add a color");
+            }
 
             if (item.Style != null)
             {
@@ -48,6 +62,10 @@ namespace Worker.Controllers
                     fit.MatchingFitItems.Add(item);
                 }
             }
+            else
+            {
+                return BadRequest("Add a style");
+            }
 
             if (item.Type != null)
             {
@@ -58,6 +76,16 @@ namespace Worker.Controllers
                     item.Type = type;
                     type.MatchingTypeItems.Add(item);
                 }
+            }
+            else
+            {
+                return BadRequest("Add a type");
+            }
+
+            // just in case item is a duplicate!
+            if (_ClothingItemContext.ClothingItems.FirstOrDefault(i => i.Link == item.Link) != null)
+            {
+                return BadRequest("Duplicate item");
             }
 
             await _ClothingItemContext.ClothingItems.AddAsync(item);

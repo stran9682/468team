@@ -1,11 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
-import { FilterComponent } from './OutfitMaker.tsx'
+import { BrowserRouter } from 'react-router-dom';
+import App from './Header'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <FilterComponent></FilterComponent>
+    <BrowserRouter>
+      <App/>
+    </BrowserRouter>
   </StrictMode>,
 )
