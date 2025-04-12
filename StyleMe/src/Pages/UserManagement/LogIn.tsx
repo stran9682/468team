@@ -1,8 +1,11 @@
 import { useState } from 'react';   
+import { useNavigate } from 'react-router-dom';
+
 const header = import.meta.env.VITE_API_URL
 
-const LogIn = ({setJwt}:{setJwt: (jwt: {token:string}) => void}) => {
+const LogIn = ({setJwt}:{setJwt: (jwt: string) => void}) => {
     const [badLoginAttempt, setLoginAttempt] = useState<String>("");
+    const navigate = useNavigate();
 
     const loginAttempt = (username: string , password : string) => {
 
@@ -17,6 +20,7 @@ const LogIn = ({setJwt}:{setJwt: (jwt: {token:string}) => void}) => {
                 .then (data =>{
                     setJwt(data.token)
                     setLoginAttempt("")
+                    navigate("/");
                 }).catch (error => {
                     setLoginAttempt("bad log in attempt " + error)
                 })        

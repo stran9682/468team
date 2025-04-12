@@ -1,18 +1,26 @@
 import { Routes, Route, NavLink } from 'react-router-dom';
 import { FilterComponent} from './Pages/OutfitMaker'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Home from './Pages/Home';
 import LogIn from './Pages/UserManagement/LogIn';
 import SignUp from './Pages/UserManagement/SignUp';
 import Profile from './Pages/UserManagement/Profile';
 
-
 const App = () => {
-    const [jwt, setJwt] = useState<{token: string} | null>(null);
+    const [jwt, setJwt] = useState<string | null>(localStorage.getItem('jwtToken'));
+
+    useEffect (() => {
+        if (jwt == null){
+            localStorage.removeItem('jwtToken');
+        }
+        else {
+            localStorage.setItem('jwtToken', jwt!)
+        }
+    }, [jwt])
 
     if (jwt == null) {
         return (
-            <>
+            <>          
                 <nav>
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/create">Create</NavLink>
@@ -31,7 +39,7 @@ const App = () => {
     else {
         return (
             <>
-               <nav>
+                <nav>
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/create">Create</NavLink>
                     <NavLink to="/profile">profile</NavLink>
@@ -39,7 +47,7 @@ const App = () => {
                 <Routes>
                     <Route path="/create" element={<FilterComponent/>}/>
                     <Route path="/" element={<Home/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/profile" element={<Profile setJwt={setJwt}/>}/>
                 </Routes>
             </>
         )

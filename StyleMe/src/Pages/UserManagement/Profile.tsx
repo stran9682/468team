@@ -1,7 +1,19 @@
-const Profile = () => {
+import { useNavigate } from "react-router-dom";
+
+
+
+const Profile = ({setJwt}:{setJwt: (jwt: null) => void}) => {
+    const navigate = useNavigate();
+
+    const onLogOut = () => {
+        setJwt(null)
+        navigate("/");
+    }
+    
     return (
         <>
-            work in progreess
+            Work in progress!
+            <a onClick={() => onLogOut()}>sign out!</a>
         </>
     )
 }
