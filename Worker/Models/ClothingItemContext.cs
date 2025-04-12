@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 /*
  * Sebastian Tran
@@ -8,7 +9,7 @@
 
 namespace Worker.Models
 {
-    public class ClothingItemContext : DbContext
+    public class ClothingItemContext : IdentityDbContext<User>
     {
         public ClothingItemContext (DbContextOptions<ClothingItemContext> options) : base(options) { }
 

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.IdentityModel.Tokens.Jwt;
 using Worker.Models;
 using Worker.Services;
 
@@ -16,7 +18,7 @@ namespace Worker.Controllers
     [Route("[controller]")]
     public class UserDataController : ControllerBase
     {
-        public UserContext _UserContext;
+        public ClothingItemContext _UserContext;
         public UserManager<User> _UserManager;
         public JwtService _JwtService;
 
@@ -26,9 +28,9 @@ namespace Worker.Controllers
          *  - UserManager provides methods for managing user data safely
          *  - JWTService for creating JWTs whenever a user logs in
          */
-        public UserDataController(UserContext userContext, UserManager<User> userManager, JwtService jwtService)
+        public UserDataController(ClothingItemContext clothingItemContext, UserManager<User> userManager, JwtService jwtService)
         {
-            _UserContext = userContext;
+            _UserContext = clothingItemContext;
             _UserManager = userManager;
             _JwtService = jwtService;
         }
@@ -111,9 +113,53 @@ namespace Worker.Controllers
          */
         [Authorize]
         [HttpGet("useroutfits")]
-        public IActionResult GetUserOutfits()
+        public async Task<IActionResult> GetUserOutfits()
         {
-            return Ok(new { Message = "This is a protected API endpoint!" });   //placeholder 
+            string tokenString = Request.Headers["Authorization"].ToString().Substring(7);  // get JWT from request
+            var token = new JwtSecurityToken(tokenString);                                  // create JWT object 
+            string username = token.Claims.First(c => c.Type == "unique_name").Value;       // extract username
+
+            var userOutfits = await _UserContext.Users.Include(u => u.Outfits).ThenInclude(o => o.Items).FirstOrDefaultAsync(u => u.UserName == username);
+
+            if (userOutfits == null)
+            {   
+                return BadRequest("User outfits is null " + username);
+            }
+
+            return Ok(userOutfits.Outfits);   //return user outfits
+        }
+
+        /*
+         * HTTP Endpoint for adding user outfits
+         * - Requires authorization first using JWT produced by login
+         */
+        [Authorize]
+        [HttpPost("useroutfits")]
+        public async Task <IActionResult> AddUserOutfit ([FromBody] List<int> clothingItemIds)
+        {
+            string tokenString = Request.Headers["Authorization"].ToString().Substring(7);  // get JWT from request
+            var token = new JwtSecurityToken(tokenString);                                  // create JWT object 
+            string username = token.Claims.First(c => c.Type == "unique_name").Value;       // extract username
+
+            var user = await _UserContext.Users.Include(u => u.Outfits).FirstOrDefaultAsync(u => u.UserName == username); // find user associated with JWT
+
+            if (clothingItemIds is not null && clothingItemIds.Count > 0 && user is not null)
+            {
+                var items = await _UserContext.ClothingItems.Where(t => clothingItemIds.Contains(t.Id)).ToListAsync();
+
+                var dataTransfer = new Outfit
+                {
+                    Items = items,
+                    User = user
+                };
+
+                user.Outfits.Add(dataTransfer);
+                await _UserContext.SaveChangesAsync();
+
+                return Ok(user.Outfits);
+            }
+            
+            return BadRequest("User outfit creation unsuccessful");
         }
     }
 }

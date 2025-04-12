@@ -9,11 +9,11 @@ using Worker.Models;
 
 #nullable disable
 
-namespace Worker.Migrations.User
+namespace Worker.Migrations
 {
-    [DbContext(typeof(UserContext))]
-    [Migration("20250322211434_whatthefuck")]
-    partial class whatthefuck
+    [DbContext(typeof(ClothingItemContext))]
+    [Migration("20250411202807_underOneMoon")]
+    partial class underOneMoon
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -177,7 +177,7 @@ namespace Worker.Migrations.User
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("OutfitsId")
+                    b.Property<int?>("OutfitId")
                         .HasColumnType("integer");
 
                     b.Property<double?>("Price")
@@ -193,13 +193,13 @@ namespace Worker.Migrations.User
 
                     b.HasIndex("ColorId");
 
-                    b.HasIndex("OutfitsId");
+                    b.HasIndex("OutfitId");
 
                     b.HasIndex("StyleId");
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("ClothingItem");
+                    b.ToTable("ClothingItems");
                 });
 
             modelBuilder.Entity("Worker.Models.ClothingType", b =>
@@ -216,7 +216,7 @@ namespace Worker.Migrations.User
 
                     b.HasKey("Id");
 
-                    b.ToTable("ClothingType");
+                    b.ToTable("ClothingTypes");
                 });
 
             modelBuilder.Entity("Worker.Models.Color", b =>
@@ -233,7 +233,7 @@ namespace Worker.Migrations.User
 
                     b.HasKey("Id");
 
-                    b.ToTable("Color");
+                    b.ToTable("ClothingColors");
                 });
 
             modelBuilder.Entity("Worker.Models.Fit", b =>
@@ -250,10 +250,10 @@ namespace Worker.Migrations.User
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fit");
+                    b.ToTable("Fits");
                 });
 
-            modelBuilder.Entity("Worker.Models.Outfits", b =>
+            modelBuilder.Entity("Worker.Models.Outfit", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -268,7 +268,7 @@ namespace Worker.Migrations.User
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Outfits");
+                    b.ToTable("Outfit");
                 });
 
             modelBuilder.Entity("Worker.Models.User", b =>
@@ -392,9 +392,9 @@ namespace Worker.Migrations.User
                         .WithMany("MatchingColoredItems")
                         .HasForeignKey("ColorId");
 
-                    b.HasOne("Worker.Models.Outfits", null)
+                    b.HasOne("Worker.Models.Outfit", null)
                         .WithMany("Items")
-                        .HasForeignKey("OutfitsId");
+                        .HasForeignKey("OutfitId");
 
                     b.HasOne("Worker.Models.Fit", "Style")
                         .WithMany("MatchingFitItems")
@@ -411,7 +411,7 @@ namespace Worker.Migrations.User
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("Worker.Models.Outfits", b =>
+            modelBuilder.Entity("Worker.Models.Outfit", b =>
                 {
                     b.HasOne("Worker.Models.User", "User")
                         .WithMany("Outfits")
@@ -435,7 +435,7 @@ namespace Worker.Migrations.User
                     b.Navigation("MatchingFitItems");
                 });
 
-            modelBuilder.Entity("Worker.Models.Outfits", b =>
+            modelBuilder.Entity("Worker.Models.Outfit", b =>
                 {
                     b.Navigation("Items");
                 });
