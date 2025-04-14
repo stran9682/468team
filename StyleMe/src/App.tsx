@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
-<<<<<<< Updated upstream
-
-const Home = ({ data }) => (
-  <div className="p-6">
-    <h2 className="text-3xl font-bold">Welcome to StyleMe!</h2>
-    <p className="mt-2">With StyleMe, you are able to find the best colors and clothing tailored specifically for you.</p>
-    <div className="mt-4">
-      <h3 className="text-2xl font-bold">Fetched Data:</h3>
-      <ul>
-        {data && data.map(item => (
-          <li key={item.id} className="mt-2">{item.title}</li>
-=======
 import { FilterComponent } from "./Pages/OutfitMaker";
 import { FiUser, FiLogOut, FiLogIn, FiUserPlus, FiHome, FiShoppingBag } from "react-icons/fi";
+
 
 const Home = ({ data }: { data: any[] }) => (
   <div className="p-6 max-w-7xl mx-auto">
@@ -33,7 +22,6 @@ const Home = ({ data }: { data: any[] }) => (
             <p className="font-medium text-gray-800">{item.name}</p>
             <p className="text-sm text-gray-500">{item.type || 'Clothing item'}</p>
           </div>
->>>>>>> Stashed changes
         ))}
       </div>
     </div>
@@ -85,11 +73,7 @@ const Catalog = () => {
   );
 };
 
-<<<<<<< Updated upstream
-const Profile = ({ isAuthenticated }) => {
-=======
 const Profile = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
->>>>>>> Stashed changes
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
@@ -138,11 +122,7 @@ const Profile = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   );
 };
 
-<<<<<<< Updated upstream
-const Login = ({ onLogin }) => {
-=======
 const Login = ({ onLogin }: { onLogin: () => void }) => {
->>>>>>> Stashed changes
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -203,11 +183,7 @@ const Login = ({ onLogin }: { onLogin: () => void }) => {
   );
 };
 
-<<<<<<< Updated upstream
-const Signup = ({ onSignup }) => {
-=======
 const Signup = ({ onSignup }: { onSignup: () => void }) => {
->>>>>>> Stashed changes
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -292,26 +268,6 @@ const Signup = ({ onSignup }: { onSignup: () => void }) => {
   );
 };
 
-<<<<<<< Updated upstream
-const Header = ({ isAuthenticated, onLogout }) => (
-  <header className="bg-blue-500 text-white p-4 flex justify-between items-center">
-    <h1 className="text-5xl font-bold text-center">StyleMe</h1>
-    <nav>
-      <Link to="/" className="px-4"> Home </Link>
-      <Link to="/catalog" className="px-4"> Catalog </Link>
-      {isAuthenticated ? (
-        <>
-          <Link to="/profile" className="px-4"> Profile </Link>
-          <button onClick={onLogout} className="px-4 bg-red-500 rounded">Logout</button>
-        </>
-      ) : (
-        <>
-          <Link to="/login" className="px-4"> Login </Link>
-          <Link to="/signup" className="px-4"> Sign Up </Link>
-        </>
-      )}
-    </nav>
-=======
 const Header = ({ isAuthenticated, onLogout }: { isAuthenticated: boolean, onLogout: () => void }) => (
   <header className="bg-white shadow-sm sticky top-0 z-10">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -371,7 +327,6 @@ const Header = ({ isAuthenticated, onLogout }: { isAuthenticated: boolean, onLog
         {/* Mobile menu button would go here */}
       </div>
     </div>
->>>>>>> Stashed changes
   </header>
 );
 
@@ -382,13 +337,8 @@ const LoadingSpinner = () => (
 );
 
 export default function App() {
-<<<<<<< Updated upstream
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [data, setData] = useState(null);
-=======
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [data, setData] = useState<any[]>([]);
->>>>>>> Stashed changes
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

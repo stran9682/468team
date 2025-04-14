@@ -2,7 +2,7 @@ import { Routes, Route, NavLink } from 'react-router-dom';
 import { FilterComponent } from './Pages/OutfitMaker';
 import { useEffect, useState } from 'react';
 import Home from './Pages/Home';
-import LogIn from './Pages/UserManagement/LogIn';
+import LogIn from './Pages/UserManagement/Login';
 import SignUp from './Pages/UserManagement/SignUp';
 import Profile from './Pages/UserManagement/Profile';
 import { FiHome, FiPlusSquare, FiUser, FiLogIn, FiUserPlus, FiLogOut } from 'react-icons/fi';
