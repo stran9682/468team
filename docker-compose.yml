@@ -1,3 +1,4 @@
+
 services:
   postgres:
     image: postgres:latest
@@ -27,30 +28,6 @@ services:
     container_name: webscraper
     networks:
       - mynetwork
-
-  frontend:
-    build: 
-      context: ./StyleMe
-      tags:
-        - "stran9682/frontend:latest"
-    container_name: frontend
-    image: stran9682/frontend:latest
-    ports:
-      - "5173:5173"
-    depends_on:
-      - worker
-    networks:
-      - mynetwork
-
-    
-  watchtower:
-    container_name: watchtower
-    image: containrrr/watchtower
-    environment:
-      - WATCHTOWER_CLEANUP=true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30 frontend
 
 networks:
   mynetwork:
