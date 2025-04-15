@@ -97,16 +97,15 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Apply CORS policy
-app.UseCors("_myAllowSpecificOrigins");
+app.UseCors("frontend");
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
