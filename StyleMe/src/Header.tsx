@@ -20,12 +20,22 @@ const App = () => {
 
     if (jwt == null) {
         return (
-            <>          
-                <nav>
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/create">Create</NavLink>
-                    <NavLink to="/login">Log In</NavLink>
-                    <NavLink to="/sign up">Sign Up</NavLink>
+            <>         
+                
+                <nav className='pl-10 pr-10 space-y-4 flex justify-between box-border'>
+
+                    <div className='flex justify-between w-1/6'>
+                        <NavLink to="/" className='text-3xl content-center'>Home</NavLink>
+                        <NavLink to="/create" className='text-3xl content-center'>Create</NavLink>
+                    </div>
+                    
+                    <div className='text-7xl w-2/3 justify-center flex'>StyleMe</div>
+
+                    <div className='flex justify-between w-1/6'>
+                        <NavLink to="/login" className='text-3xl content-center'>Log In</NavLink>
+                        <NavLink to="/sign up" className='text-3xl content-center'>Sign Up</NavLink>
+                    </div>
+
                 </nav>
                 <Routes>
                     <Route path="/create" element={<FilterComponent/>}/>
@@ -39,10 +49,17 @@ const App = () => {
     else {
         return (
             <>
-                <nav>
-                    <NavLink to="/">Home</NavLink>
-                    <NavLink to="/create">Create</NavLink>
-                    <NavLink to="/profile">profile</NavLink>
+                
+                <nav className='pl-10 pr-10 space-y-4 flex justify-between'>
+                    
+                    <div className='flex justify-between w-1/6'>
+                        <NavLink to="/" className='text-3xl content-center'>Home</NavLink>
+                        <NavLink to="/create" className='text-3xl content-center'>Create</NavLink>
+                    </div>
+                    
+                    <div className='text-7xl w-2/3 justify-center flex'>StyleMe</div>
+
+                    <NavLink to="/profile" className='text-3xl w-1/6 content-center'>profile</NavLink>    
                 </nav>
                 <Routes>
                     <Route path="/create" element={<FilterComponent/>}/>
