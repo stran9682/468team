@@ -381,11 +381,12 @@ export default function App() {
       <div className="min-h-screen bg-gray-50 text-gray-900">
         <Header isAuthenticated={isAuthenticated} onLogout={() => setIsAuthenticated(false)} />
         <Routes>
-          <Route path="/" element={<Home data={data} />} />
+          <Route path="/" element={<Home data={data!} />} />
           <Route path="/catalog" element={<Catalog />} />
           <Route path="/profile" element={<Profile isAuthenticated={isAuthenticated} />} />
           <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
           <Route path="/signup" element={<Signup onSignup={() => setIsAuthenticated(true)} />} />
+         
         </Routes>
       </div>
     </Router>

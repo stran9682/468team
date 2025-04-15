@@ -10,6 +10,6 @@ namespace Worker.Models
 {
     public class User : IdentityUser
     {
-        public List<Outfits> Outfits { get; set; } = new List<Outfits>();
+        public List<Outfit> Outfits { get; set; } = new List<Outfit>();
     }
 }

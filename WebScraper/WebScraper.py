@@ -74,7 +74,7 @@ jackets = [
 ]
 
 # Open a webpage
-for i in range (1):
+for i in range (5):
 
     driver.get("https://www2.hm.com/en_us/men/new-arrivals/view-all.html?page=" + str(i+1) + "#")
 
@@ -88,7 +88,7 @@ for i in range (1):
 
     # driver.get('file://' + path)
   
-    elements = driver.find_elements(By.CLASS_NAME, "f0cf84")
+    elements = driver.find_elements(By.CLASS_NAME, "db650c")
 
     for element in elements:
 
@@ -115,7 +115,7 @@ for i in range (1):
 
         # for getting color
         colorElement = element.find_elements(By.TAG_NAME, "ul")     # an oddity that the first UL is empty!
-        color = colorElement[1].find_element(By.TAG_NAME, "li").text.lower() if len(colorElement) >= 2 else "other"
+        color = colorElement[0].find_element(By.TAG_NAME, "li").text.lower() if len(colorElement) >= 1 else "other"
         color = color[:color.find("/")] if "/" in color else color  # handling cases when there is extra information.
         
         # getting the fit

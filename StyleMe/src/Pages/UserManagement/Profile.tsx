@@ -49,5 +49,5 @@ const Profile = ({setJwt}:{setJwt: (jwt: null) => void}) => {
         </>
     )
 }
-
+  
 export default Profile
