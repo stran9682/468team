@@ -2,7 +2,14 @@ import os
 from flask import Flask, flash, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'uploads'
+#for pose detection
+import mediapipe as mp 
+import numpy as np
+
+#for image input output operations
+import matplotlib.image as pimg
+
+UPLOAD_FOLDER = 'temp'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
@@ -43,4 +50,29 @@ from flask import send_from_directory
 
 @app.route('/uploads/<name>')
 def download_file(name):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+
+    #where the min_detection_conficence and min_tracking_confidence are the minimum threshold values for detecting the pose
+    mp_pose = mp.solutions.pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.7)
+
+    imgO = pimg.imread(os.path.join(app.config['UPLOAD_FOLDER'], name))
+    img = np.copy(imgO)
+
+    # Detecting the object using mediapipe
+    results = mp_pose.process(img)
+
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], name))
+
+    # Convert the results to JSON format
+    if results.pose_landmarks:
+        landmarks = [
+            {
+                "x": landmark.x,
+                "y": landmark.y,
+                "z": landmark.z,
+                "visibility": landmark.visibility
+            }
+            for landmark in results.pose_landmarks.landmark
+        ]
+        return {"pose_landmarks": landmarks}
+    else:
+        return {"pose_landmarks": None}
