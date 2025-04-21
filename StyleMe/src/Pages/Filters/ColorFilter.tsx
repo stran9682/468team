@@ -23,19 +23,18 @@ export function ColorFilterSidebar ({ onFilterSelect, selectedColors }: { onFilt
     }
 
     return (
-        <div style={{padding: '10px'}}>
-             <div>
-                <h1 style={{margin: '10px'}}>Color</h1>
-
-            </div>
+        <div>
+             
+            <h1 style={{margin: '10px'}} className='text-black text-5xl'>color</h1>
             <div>
                 {data.map(item => (
                     <button
                         style={{
-                            backgroundColor: selectedColors.includes(item.clothingColor) ? "lightblue" : 'transparent',
+                            backgroundColor: selectedColors.includes(item.clothingColor) ? "rgb(219 234 254)" : 'transparent',
                         }} 
                         key={item.id} 
                         onClick={() => onFilterSelect(item.clothingColor)}
+                        className='text-black'
                     >
                         {item.clothingColor}
                     </button>

@@ -24,11 +24,8 @@ export function StyleFilterSidebar ({ onFilterSelect, selectedStyles}: { onFilte
     }
 
     return (
-        <div style={{padding: '10px' }}>
-           <div>
-                <h1 style={{margin: '10px'}}>Style</h1>
-
-            </div>
+        <div>
+            <h1 style={{margin: '10px'}} className='text-black text-5xl'>Style</h1>
             <div>
                 {data.map(item => (
                     <button
@@ -37,6 +34,7 @@ export function StyleFilterSidebar ({ onFilterSelect, selectedStyles}: { onFilte
                         }} 
                         key={item.id} 
                         onClick={() => onFilterSelect(item.clothingFit)}
+                        className='text-black'
                     >
                         {item.clothingFit}
                     </button>

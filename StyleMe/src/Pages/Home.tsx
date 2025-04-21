@@ -17,7 +17,7 @@ const Home = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <div className="card fade-in" style={{ animationDelay: '0.1s' }}>
                     <FiTrendingUp className="w-10 h-10 text-purple-600 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Trending Styles</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-purple-600">Trending Styles</h3>
                     <p className="text-gray-600">
                         Stay ahead of fashion trends with our constantly updated collection.
                     </p>
@@ -25,7 +25,7 @@ const Home = () => {
 
                 <div className="card fade-in" style={{ animationDelay: '0.2s' }}>
                     <FiStar className="w-10 h-10 text-purple-600 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Personalized Picks</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-purple-600">Personalized Picks</h3>
                     <p className="text-gray-600">
                         Get recommendations based on your unique style preferences.
                     </p>
@@ -33,7 +33,7 @@ const Home = () => {
 
                 <div className="card fade-in" style={{ animationDelay: '0.3s' }}>
                     <FiShoppingBag className="w-10 h-10 text-purple-600 mb-4" />
-                    <h3 className="text-xl font-semibold mb-2">Color Analysis</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-purple-600">Color Analysis</h3>
                     <p className="text-gray-600">
                         Discover which colors complement you best with our color matching technology.
                     </p>

@@ -110,8 +110,8 @@ for i in range (5):
 
         # for finding text
         name = element.find_element(By.TAG_NAME, "h2").text.lower()
-        price = element.find_element(By.TAG_NAME, "p").text
-        price = price[2:] if price.find("$", 1) == -1 else price[2:price.find("$", 1)]
+        price = element.find_element(By.CLASS_NAME, "c25659").text
+        price = price[2:].strip() if price.find("$", 1) == -1 else price[2:price.find("$", 1)].strip()
 
         # for getting color
         colorElement = element.find_elements(By.TAG_NAME, "ul")     # an oddity that the first UL is empty!
