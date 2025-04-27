@@ -29,8 +29,10 @@ const LogIn = ({setJwt}:{setJwt: (jwt: string) => void}) => {
 
     return (
         <>
-            Username<input id="username"></input>
-            Password<input id="password"></input>
+            <h1 className='text-purple-600'>Username</h1>
+            <input id="username"></input>
+            <h1 className='text-purple-600'>Password</h1>
+            <input id="password"></input>
             <button onClick={() => loginAttempt((document.getElementById("username") as HTMLInputElement)?.value, (document.getElementById("password") as HTMLInputElement)?.value)}>Login</button>
             {badLoginAttempt}
         </>
