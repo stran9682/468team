@@ -18,7 +18,7 @@ options = vision.PoseLandmarkerOptions(
 detector = vision.PoseLandmarker.create_from_options(options)
 
 # STEP 3: Load the input image.
-image = mp.Image.create_from_file("./20.jpg")
+image = mp.Image.create_from_file("./test4.jpg")
 
 
 # STEP 4: Detect pose landmarks from the input image.
@@ -56,7 +56,15 @@ segmentation_mask = detection_result.segmentation_masks[0].numpy_view().round().
 
 landmarks = detection_result.pose_landmarks[0]
 print("x: " + str(landmarks[26].x * np.size(segmentation_mask, 1) ) + "\t" + "y: " +str(landmarks[26].y * np.size(segmentation_mask, 0)))
+shouldx = ((landmarks[11].x * np.size(segmentation_mask, 1)  + landmarks[12].x * np.size(segmentation_mask, 1) )/2)
+waistx = ((landmarks[24].x * np.size(segmentation_mask, 1)  + landmarks[23].x * np.size(segmentation_mask, 1) )/2)
+bodyx = (shouldx + waistx) / 2
 
+lefty = ((landmarks[12].y * np.size(segmentation_mask, 0)  + landmarks[24].y * np.size(segmentation_mask, 0) )/2)
+righty = ((landmarks[11].y * np.size(segmentation_mask, 0)  + landmarks[23].y * np.size(segmentation_mask, 0) )/2)
+bodyy = (lefty + righty) /2
+
+print ("x: ", bodyx, "\t", "y: ",bodyy)
 visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2)*255 # converts 2d array into a 3d RGB array
 plt.imshow(draw_landmarks_on_image(visualized_mask, detection_result))
 plt.show()

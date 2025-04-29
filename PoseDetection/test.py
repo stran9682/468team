@@ -59,20 +59,27 @@ def download_file(name):
 
     # Detecting the object using mediapipe
     results = mp_pose.process(img)
-
     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], name))
 
     # Convert the results to JSON format
+    counter =0
     if results.pose_landmarks:
         landmarks = [
             {
+                "#": counter,
                 "x": landmark.x,
                 "y": landmark.y,
                 "z": landmark.z,
-                "visibility": landmark.visibility
+                
+                "visibility": landmark.visibility,
+                "other": results[12]
             }
+            
             for landmark in results.pose_landmarks.landmark
+            
+            
         ]
+        
         return {"pose_landmarks": landmarks}
     else:
         return {"pose_landmarks": None}
