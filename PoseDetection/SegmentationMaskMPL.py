@@ -55,7 +55,55 @@ plt.show()
 segmentation_mask = detection_result.segmentation_masks[0].numpy_view().round().astype(np.uint8)
 
 landmarks = detection_result.pose_landmarks[0]
-print("x: " + str(landmarks[26].x * np.size(segmentation_mask, 1) ) + "\t" + "y: " +str(landmarks[26].y * np.size(segmentation_mask, 0)))
+# print("x: " + str(landmarks[26].x * np.size(segmentation_mask, 1) ) + "\t" + "y: " +str(landmarks[26].y * np.size(segmentation_mask, 0)))
+
+HipY = int(landmarks[24].y * np.size(segmentation_mask, 0))
+ShoulderL = int(landmarks[12].x * np.size(segmentation_mask, 1))
+ShoulderR = int(landmarks[11].x * np.size(segmentation_mask, 1))
+ShoulderY = int(landmarks[11].y * np.size(segmentation_mask, 0))
+
+
+shouldx = ((landmarks[11].x * np.size(segmentation_mask, 1)  + landmarks[12].x * np.size(segmentation_mask, 1) )/2)
+waistx = ((landmarks[24].x * np.size(segmentation_mask, 1)  + landmarks[23].x * np.size(segmentation_mask, 1) )/2)
+bodyx = (shouldx + waistx) / 2
+
+
+lefty = ((landmarks[12].y * np.size(segmentation_mask, 0)  + landmarks[24].y * np.size(segmentation_mask, 0) )/2)
+righty = ((landmarks[11].y * np.size(segmentation_mask, 0)  + landmarks[23].y * np.size(segmentation_mask, 0) )/2)
+bodyy = (lefty + righty) /2
+
+
+RowIdx = ShoulderY
+count1 = 0
+while (RowIdx < bodyy):
+    ColIdx = ShoulderL
+
+    while (ColIdx <= ShoulderR):
+        if (segmentation_mask[RowIdx, ColIdx] == 1):
+            count1 +=1
+
+        ColIdx += 1
+        
+    RowIdx +=1
+
+
+print(count1)
+
+RowIdx = int(bodyy)
+count1 = 0
+while (RowIdx < HipY):
+    ColIdx = ShoulderL
+
+    while (ColIdx <= ShoulderR):
+        if (segmentation_mask[RowIdx, ColIdx] == 1):
+            count1 +=1
+
+        ColIdx += 1
+        
+    RowIdx +=1
+
+print(count1)
+
 
 visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2)*255 # converts 2d array into a 3d RGB array
 plt.imshow(draw_landmarks_on_image(visualized_mask, detection_result))
