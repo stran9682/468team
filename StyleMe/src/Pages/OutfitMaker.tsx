@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ColorFilterSidebar } from './Filters/ColorFilter';
 import { StyleFilterSidebar } from './Filters/StyleFilter';
 import { TypeFilterSidebar } from './Filters/TypeFilter';
+import UploadFileComponent from './UploadFileComponent'
 
 const header = import.meta.env.VITE_API_URL
 
@@ -66,6 +67,7 @@ export function FilterComponent () {
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
     const [filterState, setFilterState] = useState<boolean>(false);
+    const [aiPanelState, setAiPanelState] = useState<boolean>(false);
 
     const toggleFilter = (color: string) => {
         setSelectedColors(prevColors =>
@@ -133,12 +135,19 @@ export function FilterComponent () {
                 </>
             : null}
 
+            {aiPanelState ? 
+                <>
+                    <UploadFileComponent aiPanelState={setAiPanelState} setClothingItems={setClothingItems}/> 
+                </> : 
+                null
+            }
+
             <h1 className='text-black text-6xl mt-10 mb-10'>Catalog</h1>
 
             <div className='flex text-black gap-4'>
                 <div className='w-3/4'>
                     <h3 onClick={() => setFilterState(!filterState)} className='text-black'>Filters</h3>
-                    <h3>AI Assist</h3>
+                    <h3 onClick={() => setAiPanelState(!aiPanelState)}>AI Assist</h3>
                     <ClothingItemsDisplay colors={selectedColors} fits={selectedFits} types={selectedTypes} addClothingItem={addClothingItem}/>
                 </div>
 
