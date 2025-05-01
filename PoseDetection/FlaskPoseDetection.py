@@ -1,19 +1,13 @@
 import os
-from flask import Flask, abort, flash, request, redirect, url_for
+from flask import Flask, abort, request
 from werkzeug.utils import secure_filename
 from flask_cors import CORS
 
-from mediapipe import solutions
-from mediapipe.framework.formats import landmark_pb2
 import numpy as np
 
-import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-
-import matplotlib.pyplot as plt
-import matplotlib.image as pimg
 
 import requests
 import random
@@ -165,3 +159,7 @@ def getRatio (detection_result):
     ratio = topPxCount/btmPxCount
 
     return ratio
+
+if __name__ == "__main__":
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=5000)

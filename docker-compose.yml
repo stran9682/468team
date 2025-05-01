@@ -53,6 +53,16 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 30 frontend
 
+  posedetection:
+    container_name: posedetection
+    build: PoseDetection
+    depends_on:
+      - worker
+    networks:
+      - mynetwork
+    ports:
+      - "5000:5000"
+
 networks:
   mynetwork:
 
