@@ -18,7 +18,7 @@ options = vision.PoseLandmarkerOptions(
 detector = vision.PoseLandmarker.create_from_options(options)
 
 # STEP 3: Load the input image.
-image = mp.Image.create_from_file("./20.jpg")
+image = mp.Image.create_from_file("./davidLaid.jpg")
 
 
 # STEP 4: Detect pose landmarks from the input image.
@@ -90,20 +90,19 @@ while (RowIdx < bodyy):
 print(count1)
 
 RowIdx = int(bodyy)
-count1 = 0
+count1b = 0
 while (RowIdx < HipY):
     ColIdx = ShoulderL
 
     while (ColIdx <= ShoulderR):
         if (segmentation_mask[RowIdx, ColIdx] == 1):
-            count1 +=1
+            count1b +=1
 
         ColIdx += 1
         
     RowIdx +=1
 
-print(count1)
-
+print(count1/count1b)
 
 visualized_mask = np.repeat(segmentation_mask[:, :, np.newaxis], 3, axis=2)*255 # converts 2d array into a 3d RGB array
 plt.imshow(draw_landmarks_on_image(visualized_mask, detection_result))
