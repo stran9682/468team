@@ -1,64 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ColorFilterSidebar } from './Filters/ColorFilter';
 import { StyleFilterSidebar } from './Filters/StyleFilter';
 import { TypeFilterSidebar } from './Filters/TypeFilter';
+import UploadFileComponent from './UploadFileComponent'
+import ClothingItemsDisplay from './ClothingItemDisplay';
+import { FaConciergeBell, FaRegSave } from "react-icons/fa";
+import { VscSettings } from "react-icons/vsc";
+import { useNavigate } from 'react-router-dom';
 
 const header = import.meta.env.VITE_API_URL
-
-function ClothingItemsDisplay ({colors, fits, types, addClothingItem} : {colors : string[], fits : string[], types : string[], addClothingItem : (item : any) => void}) {
-    const [data, setData] = useState<any[]>([]);
-
-    useEffect (() =>{
-        if (colors.length === 0 && fits.length === 0 && types.length === 0) {
-
-            fetch(header + "/ClothingItem/")
-            .then(res =>  res.json())    
-            .then (data => {
-                // extract data
-                setData(data)
-            });
-        }
-        else {
-            const cartesian = (...a: any[][]) => a.reduce((a, b) => a.flatMap((d: any) => b.map((e: any) => [d, e].flat())));
-            const filterRequests = [];
-
-            const colorList = colors.length ? colors : [""];
-            const fitList = fits.length ? fits : [""];
-            const typeList = types.length ? types : [""];
-
-            const combinations = cartesian(colorList, fitList, typeList);
-
-            for (const [color, fit, type] of combinations) {
-                const url = `${header}/ClothingItem/?color=${color}&fit=${fit}&type=${type}`;
-                filterRequests.push(fetch(url).then(res => res.json()));
-            }
-
-            // also vibe coding...
-            Promise.all(filterRequests)
-                .then(results => {
-                    setData(results.flat());
-                })
-                .catch(error => console.error("Error fetching filtered items:", error));
-        }
-    }, [colors, fits, types]);
-
-    return (
-        data.length !== 0 ? 
-            <div className='grid grid-cols-4 gap-2'>
-                {data.map(item =>  
-                    <div key={item.id} className='aspect-1/1.618 box-border'>
-                        <img src={`${item.image}`} onClick={() => addClothingItem(item)}/>
-                            
-                        <h2 className='text-black text-lg'>{item.name}</h2>
-                        {item.color.clothingColor}
-                        <h2>{item.style.clothingFit}</h2>
-                        <h2>{item.price}</h2>
-                    </div>
-                )}
-            </div>
-        : 'No items found for this filter combo'
-    )
-}
 
 export function FilterComponent () {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -66,6 +16,7 @@ export function FilterComponent () {
     const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
     const [filterState, setFilterState] = useState<boolean>(false);
+    const [aiPanelState, setAiPanelState] = useState<boolean>(false);
 
     const toggleFilter = (color: string) => {
         setSelectedColors(prevColors =>
@@ -102,7 +53,13 @@ export function FilterComponent () {
         setClothingItems(prev => prev.filter(i => i.id != item.id))
     }
 
+    const navigate = useNavigate(); 
     const saveClothingItems = () => {
+        if (!localStorage.getItem('jwtToken')){
+            navigate("/login")
+        }
+
+
         let list: any[] = [];
         clothingItems.forEach(element => {
             list.push(element.id);
@@ -117,6 +74,8 @@ export function FilterComponent () {
             },
             body: JSON.stringify(list)
         })
+
+        setClothingItems([])
     }
 
     return (
@@ -133,32 +92,60 @@ export function FilterComponent () {
                 </>
             : null}
 
-            <h1 className='text-black text-6xl mt-10 mb-10'>Catalog</h1>
+            {aiPanelState ? 
+                <>
+                    <UploadFileComponent aiPanelState={setAiPanelState} setClothingItems={setClothingItems}/> 
+                </> : 
+                null
+            }
 
-            <div className='flex text-black gap-4'>
-                <div className='w-3/4'>
-                    <h3 onClick={() => setFilterState(!filterState)} className='text-black'>Filters</h3>
-                    <h3>AI Assist</h3>
+            <div className='grid grid-cols-4 text-black gap-4 h-screen'>
+                <div className='col-span-3 overflow-y-auto'>
+                    <h1 className='text-black text-2xl mb-2 '>Catalog</h1>
+
+                    <div className='flex gap-6 mb-4'>
+                        <div className='flex gap-1 text-base' onClick={() => setFilterState(!filterState)}>
+                            <h3>Show Filters</h3>
+                            <VscSettings className='relative top-1'/>
+                        </div>
+
+
+                        <div className='flex gap-1 text-base' onClick={() => setAiPanelState(!aiPanelState)}>
+                            <h3 >AI Assist</h3>
+                            <FaConciergeBell className='relative top-1'/>
+                        </div>
+                    </div>
                     <ClothingItemsDisplay colors={selectedColors} fits={selectedFits} types={selectedTypes} addClothingItem={addClothingItem}/>
                 </div>
 
-                <div className='w-1/4'>
-                    Your outfit!
+                <div className='col-span-1 flex flex-col h-screen'>
+                    <div>
+                        <h1 className='text-black text-2xl mb-2'>Your Outfit</h1>
 
-                    {clothingItems.length !== 0 ? 
-                        <>
-                            <h1 onClick={() => saveClothingItems()}>save!</h1>
+                        {clothingItems.length !== 0 ? (
+                            <div className='flex gap-1 text-base mb-4'>
+                                <h1 onClick={() => saveClothingItems()} >save!</h1>
+                                <FaRegSave className='relative top-1'/>
+                            </div>
+                        ) : (
+                            <div className='text-base'>add a clothing item to begin!</div>
+                        )}
+                    </div>
 
-                            {clothingItems.map(item => 
-                                <div onClick={() => removeClothingItem(item)}>
-                                    <img src={`${item.image}`}/>
-                                    {item.name}
+                    <div className='overflow-y-auto'>
+                        {clothingItems.length !== 0 ? (
+                            clothingItems.map(item => (
+                                <div key={item.id} onClick={() => removeClothingItem(item)} className='mb-2'>
+                                    <img src={`${item.image}`} alt={item.name} className='w-full h-auto' />
+                                    <p>{item.name}</p>
                                 </div>
-                            )}
-                        </>
-                    :
-                        <div>add a clothing item to begin!</div>
-                    }
+                            ))
+                        ) : (
+                            null
+                        )}
+                    </div>
+                        
+
                 </div>
             </div>
         </>

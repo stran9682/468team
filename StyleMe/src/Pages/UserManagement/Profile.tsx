@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import OutfitDisplay from "../OutfitDisplay";
 
 const header = import.meta.env.VITE_API_URL
 
@@ -21,32 +22,24 @@ const Profile = ({setJwt}:{setJwt: (jwt: null) => void}) => {
     }, [])
  
     return (
-        <>
-            Work in progress!
-            <a onClick={() => onLogOut()}>sign out!</a>
+        <div className="h-full">
+            <div className="mb-4">
+                <h1 className="text-2xl text-black">Your saved outfits</h1>
+                <a onClick={() => onLogOut()}>sign out!</a>
+            </div>
 
-            {outfits.map(outfit => (
-                <div key={outfit.id}>
-                    {outfit.id}
-                    {outfit.items.map((item: any) => (
-                        <div 
-                            key={item.id}
-                            style={{
-                                backgroundImage: `url(${item.image})`,
-                                width: '33.33%',
-                                height: '400px',
-                                backgroundSize: "cover",
-                                color:'white',
-                                display: 'flex',
-                                justifyContent: 'center',
-                            }}
-                        >
-                            <h2 className='text-white text-lg text-shadow-lg'>{item.name}</h2>
+            {outfits.map(outfit => {
+                if (outfit.items.length > 0) {
+                    return (
+                        <div key={outfit.id} className="mb-4">
+                            <h1 className="text-xl text-black">outfit {outfit.id}</h1>
+                            <OutfitDisplay ClothingItems={outfit.items} />
                         </div>
-                    ))}
-                </div>
-            ))}
-        </>
+                    );
+                }
+                return null;
+            })}
+        </div>
     )
 }
   

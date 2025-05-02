@@ -125,7 +125,7 @@ namespace Worker.Controllers
 
             // Handle bad request (should be never, unless JWT is forged)
             if (userOutfits == null)
-            {   
+            {
                 return BadRequest("User outfits is null " + username);
             }
 
@@ -168,7 +168,7 @@ namespace Worker.Controllers
 
                 return Ok();
             }
-            
+
             return BadRequest("User outfit creation unsuccessful");
         }
     }

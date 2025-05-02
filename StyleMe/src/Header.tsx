@@ -1,4 +1,4 @@
-import { Routes, Route, NavLink } from 'react-router-dom';
+import { Routes, Route, NavLink, useNavigate } from 'react-router-dom';
 import { FilterComponent } from './Pages/OutfitMaker';
 import { useEffect, useState } from 'react';
 import Home from './Pages/Home';
@@ -9,6 +9,7 @@ import { FiHome, FiPlusSquare, FiUser, FiLogIn, FiUserPlus, FiLogOut } from 'rea
 
 const App = () => {
     const [jwt, setJwt] = useState<string | null>(localStorage.getItem('jwtToken'));
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (jwt == null) {
@@ -19,6 +20,7 @@ const App = () => {
     }, [jwt]);
 
     const handleLogout = () => {
+        navigate("/");
         setJwt(null);
     };
 
