@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+const header = import.meta.env.VITE_FLASK_URL
+
 function UploadFileComponent ({aiPanelState, setClothingItems}: {aiPanelState : (state : boolean) => void, setClothingItems : (items : any[]) => void} ) {
     const [file, setFile] = useState<File | null>(null);
 
@@ -18,7 +20,7 @@ function UploadFileComponent ({aiPanelState, setClothingItems}: {aiPanelState : 
         
             try {
                 // You can write the URL of your server or any other endpoint used for file upload
-                const result = await fetch('http://localhost:5000', {
+                const result = await fetch(header +"/", {
                     method: 'POST',
                     body: formData,
                 });

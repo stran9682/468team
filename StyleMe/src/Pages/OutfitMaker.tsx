@@ -6,6 +6,7 @@ import UploadFileComponent from './UploadFileComponent'
 import ClothingItemsDisplay from './ClothingItemDisplay';
 import { FaConciergeBell, FaRegSave } from "react-icons/fa";
 import { VscSettings } from "react-icons/vsc";
+import { useNavigate } from 'react-router-dom';
 
 const header = import.meta.env.VITE_API_URL
 
@@ -52,9 +53,10 @@ export function FilterComponent () {
         setClothingItems(prev => prev.filter(i => i.id != item.id))
     }
 
+    const navigate = useNavigate(); 
     const saveClothingItems = () => {
         if (!localStorage.getItem('jwtToken')){
-            return
+            navigate("/login")
         }
 
 
