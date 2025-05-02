@@ -1,6 +1,9 @@
 import { FiTrendingUp, FiStar, FiShoppingBag } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Home = () => {
+    const navigate = useNavigate(); // Initialize the navigate function
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Hero Section */}
@@ -44,9 +47,12 @@ const Home = () => {
             <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-8 text-center fade-in">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Ready to upgrade your style?</h2>
                 <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Join thousands of users who have transformed their wardrobe with StyleMe.
+                    Join the users who have transformed their wardrobe with StyleMe.
                 </p>
-                <button className="btn btn-primary px-6 py-3 text-lg">
+                <button 
+                    onClick={() => navigate('/sign%20up')} // Add navigation to signup
+                    className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300 text-lg"
+                >
                     Get Started Now
                 </button>
             </div>

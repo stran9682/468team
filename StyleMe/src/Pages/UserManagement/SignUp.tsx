@@ -21,9 +21,12 @@ const SignUp = () => {
 
     return (
         <>
-            Username<input id="username"></input>
-            Email<input id="email"></input>
-            Password<input id="password"></input>
+            <h1 className='text-purple-600'>Username</h1>
+            <input id="username"></input>
+            <h1 className='text-purple-600'>Email</h1>
+            <input id="email"></input>
+            <h1 className='text-purple-600'>Password</h1>
+            <input id="password"></input>
             <button onClick={() => SignUpAttempt((document.getElementById("username") as HTMLInputElement)?.value, (document.getElementById("password") as HTMLInputElement)?.value, (document.getElementById("email") as HTMLInputElement)?.value)}>Sign Up</button>
             {badSignUpAttempt}
         </>
