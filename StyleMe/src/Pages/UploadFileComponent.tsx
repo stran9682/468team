@@ -48,7 +48,7 @@ function UploadFileComponent ({aiPanelState, setClothingItems}: {aiPanelState : 
                     </div>
 
                     {file && (
-                        <button onClick={handleUpload} className="bg-purple-300 w-full">
+                        <button onClick={handleUpload} className="bg-purple-300 w-full mt-2">
                             Upload image
                         </button>
                     )}

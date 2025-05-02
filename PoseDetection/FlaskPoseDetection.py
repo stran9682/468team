@@ -69,22 +69,22 @@ def landmarks():
     ratio = getRatio(detection_result)
 
     shirtFit = getShirtFit(ratio)
-    shirts = requests.get("http://localhost:8080/ClothingItem", params={"type": "shirt", "fit":shirtFit}).json()
+    shirts = requests.get("http://worker:8080/ClothingItem", params={"type": "shirt", "fit":shirtFit}).json()
 
     while (len(shirts) < 1):
         shirtFit = getShirtFit(ratio)
-        shirts = requests.get("http://localhost:8080/ClothingItem", params={"type": "shirt", "fit":shirtFit}).json()
+        shirts = requests.get("http://worker:8080/ClothingItem", params={"type": "shirt", "fit":shirtFit}).json()
 
     shirt = random.choice(shirts)
 
     print(shirt)
 
     pantFit = random.choice(shirtToPantFit.get(shirtFit))
-    selectedPants = requests.get("http://localhost:8080/ClothingItem", params={"type": "pants", "fit":pantFit}).json()
+    selectedPants = requests.get("http://worker:8080/ClothingItem", params={"type": "pants", "fit":pantFit}).json()
 
     while (len(selectedPants) < 1):
         pantFit = random.choice(shirtToPantFit.get(shirtFit))
-        selectedPants = requests.get("http://localhost:8080/ClothingItem", params={"type": "pants", "fit":pantFit}).json()
+        selectedPants = requests.get("http://worker:8080/ClothingItem", params={"type": "pants", "fit":pantFit}).json()
 
     pant = random.choice(selectedPants)
 
