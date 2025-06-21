@@ -1,6 +1,6 @@
 # **StyleMe**
 
-## Project for CSC 488, *intro to cloud computing*, at West Chester University
+## Project for CSC 468, *intro to cloud computing*, at West Chester University
 
 ### Project Overview 
 - Google MediaPipe AI to create a segmentation mask from a photo then Numpy to process the image
